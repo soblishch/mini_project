@@ -102,9 +102,7 @@ plt.scatter(sell_dates, sell_prices,
             zorder=10)
 
 
-plt.title(f"{ticker} Moving Average Crossover")
-plt.xlabel("Date")
-plt.ylabel("Price")
+plt.title(f"{ticker} - стратегія перетину ковзного середнього")
 plt.legend(loc="upper left")
 plt.grid(True)
 

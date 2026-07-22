@@ -1,4 +1,4 @@
-# mini_project
+# Розробка простого торгового алгоритму на Python📈
 
 **виконували: Sofiia Blishch та Olha Kagramanyan**
 
@@ -90,10 +90,66 @@ profit_lost = []``
 
 **ПРИБУТОК: 1.5699996948242188 злотих на 1 акцію**
 
+### Знаходження точок купівлі/продажу
+Для того, щоб знайти дати та ціну купівлю або продажу якції - ствроюємо нові пусті списки:
+```python
+buy_dates = []
+buy_prices = []
+sell_dates = []
+sell_prices = []
+```
+Далі проходимось циклом від другого дня(адже ми порівнюємо дні із попередніми) до останнього:
+```python
+for i in range(1, len(data)):
+```
+Так як зміни сигналу з 0 на 1 означає купівлю, додаємо його до списку наступним кодом:
+```python
+for i in range(1, len(data)):
+    if data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i - 1] == 0:
+        buy_dates.append(data.index[i])
+        buy_prices.append((data["Moving average - 20"].iloc[i] +
+                           data["Moving average - 50"].iloc[i]) / 2)
+```
+Спочатку точки купівлі та продажу розміщувалися на ціні закриття `Close`, оскільки саме вона відповідає ціні купівлі/продажу. 
+Для покращення візуалізації ми перенесли точки на середнє значення між `Moving average - 20` та `Moving average - 50`. 
+Це дозволило зробити місця перетину ковзних середніх, які подають торговий сигнал, більш точним на графіку.
 
 ### Візуалізація
 
-Створюємо графік, називаємо осі (ціна та дата) та відображаємо дані.
+Створюємо графік, задаємо йому розміри: 
+```python
+figure(figsize=(16, 7))
+```
+Називаємо осі (ціна та дата) та відображаємо дані.
 
-Ціна: ``plt.plot(data.index, data["Close"])`` - тут використовуємо data.index, а не data["Date"], бо yfinance передає це як спеціальний індекс-дату, яка таким способом виводиться. 
+Ціна: 
+```python
+plt.plot(data.index, data["Close"], label="Close price")
+```
+Тут використовуємо data.index, а не data["Date"], бо yfinance передає це як спеціальний індекс-дату, яка таким способом виводиться. 
+Середнє ковзне за 20 днів: 
+```python
+plt.plot(data.index, data["Moving average - 20"], label="Moving average - 20")
+```
+Середнє ковзне за 50 днів: 
+```python
+plt.plot(data.index, data["Moving average - 50"], label="Moving average - 50")
+```
+
+Додаємо точки купівлі та продажу:
+```python
+plt.scatter(buy_dates, buy_prices,
+            color="green",
+            s=50,
+            edgecolors="black",
+            label="Buy",
+            zorder=10)
+plt.scatter(sell_dates, sell_prices,
+            color="red",
+            s=50,
+            edgecolors="black",
+            label="Sell",
+            zorder=10)
+```
+Додаємо назву графіку, посуваємо легенду та додаємо сітку клітинок✅
 
