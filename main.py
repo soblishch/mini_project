@@ -54,12 +54,56 @@ data.to_csv("data.csv", encoding="utf-8")
 print(f"Profit: {data["Profit/Lost"].sum()}")
 
 
+# points of enter/exit
+buy_dates = []
+buy_prices = []
+
+sell_dates = []
+sell_prices = []
+
+for i in range(1, len(data)):
+    if data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i - 1] == 0:
+        buy_dates.append(data.index[i])
+        buy_prices.append((data["Moving average - 20"].iloc[i] +
+                           data["Moving average - 50"].iloc[i]) / 2)
+
+    if data["Signal"].iloc[i] == 0 and data["Signal"].iloc[i - 1] == 1:
+        sell_dates.append(data.index[i])
+        sell_prices.append((data["Moving average - 20"].iloc[i] +
+                            data["Moving average - 50"].iloc[i]) / 2)
+
+# print("Buy:", len(buy_dates))
+# print("Sell:", len(sell_dates))
+# print(buy_dates)
+# print(sell_dates)
 
 #Візуалізація
+plt.figure(figsize=(16, 7))
 
 plt.ylabel("Ціна")
 plt.xlabel("Дата")
 
-plt.plot(data.index, data["Close"])
+plt.plot(data.index, data["Close"], label="Close price")
+plt.plot(data.index, data["Moving average - 20"], label="Moving average - 20")
+plt.plot(data.index, data["Moving average - 50"], label="Moving average - 50")
+
+plt.scatter(buy_dates, buy_prices,
+            color="green",
+            s=50,
+            edgecolors="black",
+            label="Buy",
+            zorder=10)
+
+plt.scatter(sell_dates, sell_prices,
+            color="red",
+            s=50,
+            edgecolors="black",
+            label="Sell",
+            zorder=10)
+
+
+plt.title(f"{ticker} - стратегія перетину ковзного середнього")
+plt.legend(loc="upper left")
+plt.grid(True)
 
 plt.show()
