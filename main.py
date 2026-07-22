@@ -28,7 +28,6 @@ for date in data.index:
 
 
 # P/L
-buy_price = 0
 profit_lost = []
 
 for i in range(len(data)):
@@ -37,7 +36,6 @@ for i in range(len(data)):
         continue
 
     if data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i-1] == 0:
-        buy_price = data["Close"].iloc[i]
         profit_lost.append(0)
     elif data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i-1] == 1:
         profit = data["Close"].iloc[i] - data["Close"].iloc[i - 1]
