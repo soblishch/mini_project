@@ -1,5 +1,5 @@
 import yfinance as yf
-import pandas as pd
+import matplotlib.pyplot as plt
 
 ticker = "KER.WA"
 
@@ -25,4 +25,41 @@ for date in data.index:
     if data.loc[date, "Moving average - 20"] > data.loc[date, "Moving average - 50"]:
         data.loc[date, "Signal"] = 1
 
-print(data)
+
+
+# P/L
+profit_lost = []
+
+for i in range(len(data)):
+    if i == 0:
+        profit_lost.append(0)
+        continue
+
+    if data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i-1] == 0:
+        profit_lost.append(0)
+    elif data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i-1] == 1:
+        profit = data["Close"].iloc[i] - data["Close"].iloc[i - 1]
+        profit_lost.append(profit)
+    elif data["Signal"].iloc[i] == 0 and data["Signal"].iloc[i - 1] == 1:
+        profit = data["Close"].iloc[i] - data["Close"].iloc[i - 1]
+        profit_lost.append(profit)
+    else:
+        profit_lost.append(0)
+
+data["Profit/Lost"] = profit_lost
+
+
+data.to_csv("data.csv", encoding="utf-8")
+
+print(f"Profit: {data["Profit/Lost"].sum()}")
+
+
+
+#Візуалізація
+
+plt.ylabel("Ціна")
+plt.xlabel("Дата")
+
+plt.plot(data.index, data["Close"])
+
+plt.show()
