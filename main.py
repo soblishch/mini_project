@@ -53,7 +53,21 @@ data.to_csv("data.csv", encoding="utf-8")
 
 print(f"Profit: {data["Profit/Lost"].sum()}")
 
+# points of enter/exit
+buy_dates = []
+buy_prices = []
 
+sell_dates = []
+sell_prices = []
+
+for i in range(1, len(data)):
+    if data["Signal"].iloc[i] == 1 and data["Signal"].iloc[i - 1] == 0:
+        buy_dates.append(data.index[i])
+        buy_prices.append(data["Close"].iloc[i])
+
+    if data["Signal"].iloc[i] == 0 and data["Signal"].iloc[i - 1] == 1:
+        sell_dates.append(data.index[i])
+        sell_prices.append(data["Close"].iloc[i])
 
 #Візуалізація
 
