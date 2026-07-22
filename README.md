@@ -19,7 +19,7 @@ Date
 2025-07-22  18.100000  18.139999  17.980000  18.139999   3071
 ```
 
-Yfinance робиль багаторівневий header, тож для зручності ми забрали рядок з KER.WA : `data.columns = data.columns.droplevel(1)`
+Yfinance робить багаторівневий header, тож для зручності ми забрали рядок з KER.WA : `data.columns = data.columns.droplevel(1)`
 
 Команда звертається до заголовка таблиці, формуючи:
 ```text
