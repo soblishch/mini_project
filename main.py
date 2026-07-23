@@ -80,8 +80,8 @@ for i in range(1, len(data)):
 #Візуалізація
 plt.figure(figsize=(16, 7))
 
-plt.ylabel("Ціна")
-plt.xlabel("Дата")
+plt.ylabel("Price, PLN")
+plt.xlabel("Date")
 
 plt.plot(data.index, data["Close"], label="Close price")
 plt.plot(data.index, data["Moving average - 20"], label="Moving average - 20")
